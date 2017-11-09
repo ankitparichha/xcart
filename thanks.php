@@ -1,8 +1,8 @@
 <?php
         session_start();
         if(empty($_SESSION['id'])){
-          echo "<script>alert('You need to login to sell anything!!');</script>";
-          header("Location:xcart.php");
+          $_SESSION['notloginbuy1']=1;
+          header("Location:buy.php");
         }
         $err="";
         $err1="";

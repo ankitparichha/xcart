@@ -1,87 +1,40 @@
 <?php
     session_start();
-    if(!empty($_SESSION['notloginbuy1']))
-    {
-      echo "<script>alert('You need to login/sign up to buy anything!!');</script>";
-      unset($_SESSION['notloginbuy1']);
-    }
-
-    if(!empty($_SESSION['notloginbuy']))
-    {
-      echo "<script>alert('You need to login/sign up to buy anything!!');</script>";
-      unset($_SESSION['notloginbuy']);
+    $_SESSION['buy']=1;
+    if(empty($_SESSION['id'])){
+      $_SESSION['notloginbuy']=1;
+      header("Location:buy.php");
     }
     $err="";
     $err1="";
     extract($_REQUEST);
-    echo "<script>var x=0;var x1=0;</script>";
-        if(!empty($uname)){
-          $con = mysqli_connect("localhost","root","","ankitdb");
-        //  consol.log('Connection Created!!');
-          if(!$con)
-          {
-          die('Could not connect:'.mysqli_connect_error());
-          }
-          $data=mysqli_query($con,"select * from user_detail where email='".@$uname."'");
-          $row=mysqli_fetch_array($data);
-          if(mysqli_num_rows($data)==0){
-            $err="User Doesn't Exist";
-            echo("<script>var x=1;</script>");
-          }
-          else if($row['password'] != md5($psw)){
-            $err="Wrong Password...";
-            echo("<script>var x=1</script>");
-          }
-          else
-          {
-            $_SESSION['id']=$row['id'];
-            header("Location:buy1.php");
-          }
-        }
-        if(!empty($email)){
           $con = mysqli_connect("localhost","root","","ankitdb");
           if(!$con)
           {
           die('Could not connect:'.mysqli_connect_error());
           }
-          $data=mysqli_query($con,"select * from user_detail where email='".@$email."'");
-          $row=mysqli_fetch_array($data);
-          if(mysqli_num_rows($data)!=0){
-            $err1="User Already Exists!!!";
-            echo("<script>var x1=1;</script>");
+          $sql="select * from sell";
+          $rs=mysqli_query($con,$sql) or die(mysql_error());
+          while($result=mysqli_fetch_array($rs))
+          {
+            $category=$result['category'];
+            $title=$result['title'];
+            $price=$result['price'];
+            $brand=$result['brand'];
+            $condition=$result['condition1'];
+            $date=$result['date'];
+            $description=$result['description'];
+            $nname=$result['nname'];
+            $nphone=$result['nphone'];
+            $nemail=$result['nemail'];
+            $address=$result['address'];
+            $state=$result['state'];
+            $city=$result['city'];
+            $pin=$result['pin'];
           }
-          else {
-            mysqli_query($con,"insert into user_detail values('','".$email."','".md5($pass)."')");
-            echo("<script>alert('User Registered successfully!!!');</script>");
-          }
-        }
 
-        $con = mysqli_connect("localhost","root","","ankitdb");
-        if(!$con)
-        {
-        die('Could not connect:'.mysqli_connect_error());
-        }
-        $sql="select * from sell";
-        $rs=mysqli_query($con,$sql) or die(mysql_error());
-        while($result=mysqli_fetch_array($rs))
-        {
-          $category=$result['category'];
-          $title=$result['title'];
-          $price=$result['price'];
-          $brand=$result['brand'];
-          $condition=$result['condition1'];
-          $date=$result['date'];
-          $description=$result['description'];
-          $nname=$result['nname'];
-          $nphone=$result['nphone'];
-          $nemail=$result['nemail'];
-          $address=$result['address'];
-          $state=$result['state'];
-          $city=$result['city'];
-          $pin=$result['pin'];
-        }
-
- ?>
+          mysqli_close($con);
+?>
 
 <!DOCTYPE html>
 <html>
@@ -90,9 +43,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link rel="stylesheet" href="xcart.css">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
   <link rel="stylesheet" href="buy.css">
-  <link rel="stylesheet" href="sell.css">
+  <link rel="stylesheet" href="xcart.css">
+  <script language="Javascript" src="jquery.js"></script>
+  <script type="text/JavaScript" src="sell.js"></script>
   <link rel="icon" href="images/icon.jpg">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -104,7 +59,7 @@
   setInterval(blinker, 100);
   </script>
   </head>
-  <body background="images/bg1.jpg">
+  <body background="images/bg1.jpg " style="background-repeat:no-repeat; background-size:cover; ">
 <table>
   <tr >
     <table class="nav">
@@ -146,68 +101,9 @@
           <a class="navi" style="text-decoration:none;"   href="track.php">Track Order</a>
         </td>
         <td  style="padding-left:25px" >
-          <button class="navi" style="text-decoration:none; width:85%;border-radius:30px";  onclick="document.getElementById('id02').style.display='block' "><span class="glyphicon glyphicon-user"></span> Sign Up</button>
-          <div id="id02" class="modal" >
-          <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">×</span>
-          <form class="modal-content animate" method="post" onsubmit="return clickSignUp();" action="" id="signupForm">
-            <div class="imgcontainer">
-              <img src="images/male.png" height="140px" width="140px" alt="Avatar" class="avatar">
-            </div>
-            <div class="container">
-              <label style="align:left;margin-left:10px; font-size:15px;" ><b>Email:</b></label></br>
-              <input style="width:95%;height:45px; margin-left:10px;border-radius:10px" type="text" placeholder="Enter Email" name="email" required></br>
-
-              <label style="align:left;margin-left:10px; font-size:15px;" ><b>Password:</b></label></br>
-              <input style="width:95%;height:45px;margin-left:10px; border-radius:10px" type="password" placeholder="Enter Password" name="pass" required></br>
-
-              <label style="align:left;margin-left:10px; font-size:15px;" ><b>Confirm Password:</b></label></br>
-              <input style="width:95%;height:45px;margin-left:10px; border-radius:10px" type="password" placeholder="Confirm Password" name="pass-repeat" required></br>
-              <p id='msg1' style="font-size:15px;margin-left:10px;color:red;">&nbsp;&nbsp;<?php echo $err1 ?></p>
-              <p style="margin-left:10px;">By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
-
-              <div class="clearfix" style="background-color:#f1f1f1; height:65px; border-radius:9px">
-                <button style="width:47% ; height:45px; border-radius:10px;margin-left:10px" type="button"  onclick="document.getElementById('id02').style.display='none';setTimeout(function(){document.getElementById('signupForm').classList.add('animate')},700);" class="cancelbtn">Cancel</button>
-                <button style="width:48%;; border-radius:10px; height:45px ;" type="submit" class="signupbtn">Sign Up</button>
-              </div>
-            </div>
-          </form>
-        </div>
-
-
         </td>
         <td   style="padding-right:10px">
-          <button  class="navi" style="text-decoration:none; align:center; width:95%;border-radius:30px "  onclick="document.getElementById('id01').style.display='block'"><span class="glyphicon glyphicon-user" ></span> Login</button>
-
-          <div id="id01" class="modal">
-            <span onclick="document.getElementById('id01').style.display='none'"
-          class="close" title="Close Modal">&times;</span>
-
-            <!-- Modal Content -->
-            <form class="modal-content animate" action="" method="post"  id='loginForm'>
-              <div class="imgcontainer">
-                <img src="images/male.png" height="140px" width="140px" alt="Avatar" class="avatar">
-              </div>
-
-              <div class="container" >
-                <label style="font-size:15px;margin-left:10px;" align="left" ><b>Username: </b></label>
-                <input style="width:95%;margin-left:10px; border-radius:10px " type="text"  placeholder="Enter Username" name="uname" required>
-
-                <label style="font-size:15px;margin-left:10px;" align="left"><b>Password: </b></label>
-                <input style="width:95%;margin-left:10px; border-radius:10px" type="password" placeholder="Enter Password" name="psw" required>
-                <p id='msg' style="font-size:15px;margin-left:10px;color:red;">&nbsp;&nbsp;<?php echo $err ?></p>
-                <button style="height:45px;margin-left:10px; border-radius:10px; width:95%" type="submit">Login</button>
-
-              </div>
-
-              <div class="container" style="background-color:#f1f1f1; border-radius:9px" >
-                <button style="height:45px;margin-left:10px; width:30%; border-radius:10px" type="button" onclick="document.getElementById('id01').style.display='none';setTimeout(function(){document.getElementById('loginForm').classList.add('animate')},700);" class="cancelbtn">Cancel</button>
-                <span style="padding-right:25px" class="psw"><a href="#">Forgot password?</a></span>
-              </div>
-            </form>
-          </div>
-
-
-
+          <a href="logout.php"><button  class="navi" style="text-decoration:none; align:center; width:95%;border-radius:30px "><span class="glyphicon glyphicon-user" ></span> Logout</button></a>
 
         </td>
       </tr>
@@ -523,6 +419,10 @@ window.onload = function(){
     document.getElementById('signupForm').classList.remove('animate');
     document.getElementById('id02').style.display='block';
   }
+}
+function cart()
+{
+  alert('Successfully Added to Cart');
 }
 function clickSignUp(){
   if(document.getElementsByName('pass')[0].value!=document.getElementsByName('pass-repeat')[0].value){

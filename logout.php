@@ -1,5 +1,12 @@
 <?php
   session_start();
   session_destroy();
+  if($_SESSION['buy']==1)
+  {
+    header("Location:buy.php");
+  }
+  else
+  {
   header("Location:xcart.php");
+  }
  ?>

@@ -6,10 +6,16 @@
       echo "<script>alert('You need to login/sign up to sell anything!!');</script>";
       unset($_SESSION['notlogin']);
     }
+    if(!empty($_SESSION['notloginbuy']))
+    {
+      echo "<script>alert('You need to login/sign up to buy anything!!');</script>";
+      unset($_SESSION['notloginbuy']);
+    }
 
     if(!empty($_SESSION['id'])){
       header("Location:main.php");
     }
+
     $err="";
     $err1="";
     extract($_REQUEST);
@@ -54,6 +60,30 @@
             mysqli_query($con,"insert into user_detail values('','".$email."','".md5($pass)."')");
             echo("<script>alert('User Registered successfully!!!');</script>");
           }
+        }
+        $con = mysqli_connect("localhost","root","","ankitdb");
+        if(!$con)
+        {
+        die('Could not connect:'.mysqli_connect_error());
+        }
+        $sql="select * from sell";
+        $rs=mysqli_query($con,$sql) or die(mysql_error());
+        while($result=mysqli_fetch_array($rs))
+        {
+          $category=$result['category'];
+          $title=$result['title'];
+          $price=$result['price'];
+          $brand=$result['brand'];
+          $condition=$result['condition1'];
+          $date=$result['date'];
+          $description=$result['description'];
+          $nname=$result['nname'];
+          $nphone=$result['nphone'];
+          $nemail=$result['nemail'];
+          $address=$result['address'];
+          $state=$result['state'];
+          $city=$result['city'];
+          $pin=$result['pin'];
         }
 
  ?>
