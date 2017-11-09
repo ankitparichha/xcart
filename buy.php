@@ -222,12 +222,12 @@
                                     <table width="100%">
                                       <tr>
                                       <td style="text-align:center; padding-top:0px; padding-left:20px; "  >
-                                        <a href="main.php" style="font-size:25px; font-family:Rockwell;"><button name="buy" type="button" style=" border-radius:30px; width:70%;height:45px; background-color:#ff1a1a; "> BUY NOW</button></a></td>
+                                        <a href="thanks.php" style="font-size:25px; font-family:Rockwell;"><button name="buy" type="button" style=" border-radius:30px; width:70%;height:45px; background-color:#ff1a1a; "> BUY NOW</button></a></td>
 
                                       </tr>
                                       <tr>
                                         <td style="text-align:center; padding-left:20px;  padding-top:20px; padding-bottom:20px"  >
-                                    <button name="post" type="submit" style="font-size:25px; font-family:Rockwell;border-radius:30px; width:70%; background-color:#009900;height:45px;">ADD TO CART</button>
+                                    <a href="thanks.php"><button name="post" type="button" onclick="cart()" style="font-size:25px; font-family:Rockwell;border-radius:30px; width:70%; background-color:#009900;height:45px;">ADD TO CART</button></a>
                                 </td>
                                 </tr>
 
@@ -418,6 +418,10 @@ window.onload = function(){
     document.getElementById('signupForm').classList.remove('animate');
     document.getElementById('id02').style.display='block';
   }
+}
+function cart()
+{
+  alert('Successfully Added to Cart');
 }
 function clickSignUp(){
   if(document.getElementsByName('pass')[0].value!=document.getElementsByName('pass-repeat')[0].value){

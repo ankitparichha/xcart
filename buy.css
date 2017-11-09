@@ -3,12 +3,22 @@ table.buyt {
   margin:50px;
   margin-left:140px;
   width:80%;
-  height:800px;
+  height:100%auto;
   text-align: left;
   font-size: 30;
   border-radius: 10px;
 
 }
+table.thanks {
+height: 400px;
+font-size: 25px;
+}
+
+table.thanks tr,
+table.thanks td {
+  border: 2px solid black;
+}
+
 .xx
 {
   border: 5px solid #003399;

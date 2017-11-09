@@ -1,11 +1,39 @@
 <?php
-    session_start();
-    if(!empty($_SESSION['id'])){
-      $_SESSION['notlogin']=1;
-      header("Location:xcart.php");
-    }
+        session_start();
+        if(empty($_SESSION['id'])){
+          echo "<script>alert('You need to login to sell anything!!');</script>";
+          header("Location:xcart.php");
+        }
+        $err="";
+        $err1="";
+        extract($_REQUEST);
+              $con = mysqli_connect("localhost","root","","ankitdb");
+              if(!$con)
+              {
+              die('Could not connect:'.mysqli_connect_error());
+              }
+              $sql="SELECT * from sell";
+              $rs=mysqli_query($con,$sql) or die(mysql_error());
+              while($result=mysqli_fetch_array($rs))
+              {
+                $category=$result['category'];
+                $title=$result['title'];
+                $price=$result['price'];
+                $brand=$result['brand'];
+                $condition=$result['condition1'];
+                $date=$result['date'];
+                $description=$result['description'];
+                $nname=$result['nname'];
+                $nphone=$result['nphone'];
+                $nemail=$result['nemail'];
+                $address=$result['address'];
+                $state=$result['state'];
+                $city=$result['city'];
+                $pin=$result['pin'];
+              }
 
- ?>
+              mysqli_close($con);
+?>
 
 <!DOCTYPE html>
 <html>
@@ -15,6 +43,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="sell.css">
+  <link rel="stylesheet" href="buy.css">
   <link rel="stylesheet" href="xcart.css">
   <script language="Javascript" src="jquery.js"></script>
   <script type="text/JavaScript" src="sell.js"></script>
@@ -91,23 +120,63 @@
                                               <tr height="60px">
                                                 <td>
                                                 </td>
-                                                <td>
-                                                </td>
-                                                <td>
-                                                </td>
+
 
                                               </tr>
                                               <tr height="10px">
-                                                <td colspan="2" style="text-align:center">
-                                                  <p><h3><b>Thank you for showing interest in this product.</b></h3></p>
+                                                <td  class="navi" style="text-align:left; padding-left:70px">
+                                                  <p><h2><b>Thank you for showing interest in this product...</b></h2></p>
                                                 </td>
-                                                <td style="text-align:center; padding-left:150px; color:red"> * mandatory</td>
+
                                               </tr>
+                                              <tr>
+                                                <td class="navi" style="text-align:left; padding-left:100px;padding-top:20px">Here is the compelete information of the seller - </td>
+                                              </tr>
+                                              <tr >
+                                                <td style="padding-top:20px" colspan="2"><hr></td>
+                                              </tr>
+                                              <tr>
+                                                <td style="padding-left:50px;padding-right:50px; padding-top:30px" colspan="2">
+                                                  <div class="navi">
+                                                  <table class="thanks" width="100%">
+                                                    <tr >
+                                                      <td width="40%" style="text-align:right; padding-right:100px ">Name:
+                                                      </td>
+                                                      <td style="text-align:left; padding-left:100px"><?php echo $nname; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td style="text-align:right; padding-right:100px">Mobile:</td>
+                                                      <td style="text-align:left; padding-left:100px"><?php echo $nphone; ?></td>
+                                                    </tr>
+
+                                                    <tr>
+                                                      <td style="text-align:right; padding-right:100px">Email:</td>
+                                                      <td style="text-align:left; padding-left:100px"><?php echo $nemail; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td style="text-align:right; padding-right:100px">Address:</td>
+                                                      <td style="text-align:left; padding-left:100px"><?php echo $address; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td style="text-align:right; padding-right:100px">City:</td>
+                                                      <td style="text-align:left; padding-left:100px"><?php echo $city; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td style="text-align:right; padding-right:100px">State:</td>
+                                                      <td style="text-align:left; padding-left:100px"><?php echo $state; ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td style="text-align:right; padding-right:100px">ZIP:</td>
+                                                      <td style="text-align:left; padding-left:100px"><?php echo $pin; ?></td>
+                                                    </tr>
+
+                                                  </table>
+                                                </div>
+                                                </td>
+
+                                              </tr>
+
                                               <tr height="60px">
-                                                <td>
-                                                </td>
-                                                <td>
-                                                </td>
                                                 <td>
                                                 </td>
 
