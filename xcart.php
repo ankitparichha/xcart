@@ -22,7 +22,6 @@
     echo "<script>var x=0;var x1=0;</script>";
         if(!empty($uname)){
           $con = mysqli_connect("localhost","root","","ankitdb");
-        //  consol.log('Connection Created!!');
           if(!$con)
           {
           die('Could not connect:'.mysqli_connect_error());
@@ -45,8 +44,7 @@
         }
         if(!empty($email)){
           $con = mysqli_connect("localhost","root","","ankitdb");
-        //  consol.log('Connection Created!!');
-          if(!$con)
+        if(!$con)
           {
           die('Could not connect:'.mysqli_connect_error());
           }
@@ -118,8 +116,8 @@
           </a>
         </td>
         <td align="center" style="width:73%" >
-          <form class="searchbox_1" action="search.php" method="post">
-            <input type="search" class="search_1" placeholder="Search" />
+          <form class="searchbox_1" action="" method="post">
+            <input type="search" class="search_1" name="search" placeholder="Search" />
             <button type="submit" class="submit_1" value="search">&nbsp;</button>
           </form>
         </td>
