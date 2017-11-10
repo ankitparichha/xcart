@@ -1,6 +1,9 @@
 <?php
     session_start();
-
+    if(!empty($_SESSION['fail-search'])){
+      echo "<script>alert('No related Product Found!!!');</script>";
+      unset($_SESSION['fail-search']);
+    }
     if(!empty($_SESSION['notlogin']))
     {
       echo "<script>alert('You need to login/sign up to sell anything!!');</script>";
@@ -59,30 +62,7 @@
             echo("<script>alert('User Registered successfully!!!');</script>");
           }
         }
-        $con = mysqli_connect("localhost","root","","ankitdb");
-        if(!$con)
-        {
-        die('Could not connect:'.mysqli_connect_error());
-        }
-        $sql="select * from sell";
-        $rs=mysqli_query($con,$sql) or die(mysql_error());
-        while($result=mysqli_fetch_array($rs))
-        {
-          $category=$result['category'];
-          $title=$result['title'];
-          $price=$result['price'];
-          $brand=$result['brand'];
-          $condition=$result['condition1'];
-          $date=$result['date'];
-          $description=$result['description'];
-          $nname=$result['nname'];
-          $nphone=$result['nphone'];
-          $nemail=$result['nemail'];
-          $address=$result['address'];
-          $state=$result['state'];
-          $city=$result['city'];
-          $pin=$result['pin'];
-        }
+
 
  ?>
 
@@ -116,8 +96,8 @@
           </a>
         </td>
         <td align="center" style="width:73%" >
-          <form class="searchbox_1" action="" method="post">
-            <input type="search" class="search_1" name="search" placeholder="Search" />
+          <form class="searchbox_1" action="search.php" onsubmit="return sear();"  method="get">
+            <input type="text" class="search_1" name="search" placeholder="Search" />
             <button type="submit" class="submit_1" value="search">&nbsp;</button>
           </form>
         </td>
@@ -530,6 +510,17 @@ function clickSignUp(){
   }
   return true;
 }
+function sear()
+{
+   if(document.getElementsByName('search')[0].value==undefined || document.getElementsByName('search')[0].value==''){
+     alert('Search bar cannot be empty!!');
+    return false;
+    }
+    <?php
+      $_SESSION['prev']='xcart.php';
+     ?>
+   return true;
+}
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
     if (event.target == modal ) {
@@ -540,6 +531,8 @@ window.onclick = function(event) {
         modal1.style.display = "none";
         setTimeout(function(){document.getElementById('signupForm').classList.add('animate')},700);
     }
+
+
 
 }
 </script>

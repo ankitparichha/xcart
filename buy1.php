@@ -1,10 +1,10 @@
 <?php
     session_start();
-    $_SESSION['buy']=1;
-    if(empty($_SESSION['id'])){
-      $_SESSION['notloginbuy']=1;
-      header("Location:buy.php");
+    if(!empty($_SESSION['fail-search'])){
+      echo "<script>alert('No related Product Found!!!');</script>";
+      unset($_SESSION['fail-search']);
     }
+    $_SESSION['buy']=1;
     $err="";
     $err1="";
     extract($_REQUEST);
@@ -13,10 +13,9 @@
           {
           die('Could not connect:'.mysqli_connect_error());
           }
-          $sql="select * from sell";
+          $sql="select * from sell where id=".$_SESSION['searchid'];
           $rs=mysqli_query($con,$sql) or die(mysql_error());
-          while($result=mysqli_fetch_array($rs))
-          {
+          $result=mysqli_fetch_array($rs);
             $category=$result['category'];
             $title=$result['title'];
             $price=$result['price'];
@@ -31,7 +30,6 @@
             $state=$result['state'];
             $city=$result['city'];
             $pin=$result['pin'];
-          }
 
           mysqli_close($con);
 ?>
@@ -70,8 +68,8 @@
           </a>
         </td>
         <td align="center" style="width:73%" >
-          <form class="searchbox_1" action="search.php" method="post">
-            <input type="search" class="search_1" placeholder="Search" />
+          <form class="searchbox_1" action="search.php" onsubmit="return sear()" method="post">
+            <input type="text" class="search_1" placeholder="Search" name='search' />
             <button type="submit" class="submit_1" value="search">&nbsp;</button>
           </form>
         </td>
@@ -432,6 +430,17 @@ function clickSignUp(){
   return false;
   }
   return true;
+}
+function sear()
+{
+   if(document.getElementsByName('search')[0].value==undefined || document.getElementsByName('search')[0].value==''){
+     alert('Search bar cannot be empty!!');
+    return false;
+    }
+    <?php
+      $_SESSION['prev']='buy1.php';
+     ?>
+   return true;
 }
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {

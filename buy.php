@@ -1,16 +1,12 @@
 <?php
     session_start();
-    if(!empty($_SESSION['notloginbuy1']))
-    {
-      echo "<script>alert('You need to login/sign up to buy anything!!');</script>";
-      unset($_SESSION['notloginbuy1']);
+    if(!empty($_SESSION['fail-search'])){
+      echo "<script>alert('No related Product Found!!!');</script>";
+      unset($_SESSION['fail-search']);
     }
+    if(!empty($_SESSION['id']))
+        header('Location:buy1.php');
 
-    if(!empty($_SESSION['notloginbuy']))
-    {
-      echo "<script>alert('You need to login/sign up to buy anything!!');</script>";
-      unset($_SESSION['notloginbuy']);
-    }
     $err="";
     $err1="";
     extract($_REQUEST);
@@ -61,10 +57,9 @@
         {
         die('Could not connect:'.mysqli_connect_error());
         }
-        $sql="select * from sell";
+        $sql="select * from sell where id=".$_SESSION['searchid'];
         $rs=mysqli_query($con,$sql) or die(mysql_error());
-        while($result=mysqli_fetch_array($rs))
-        {
+        $result=mysqli_fetch_array($rs);
           $category=$result['category'];
           $title=$result['title'];
           $price=$result['price'];
@@ -79,7 +74,7 @@
           $state=$result['state'];
           $city=$result['city'];
           $pin=$result['pin'];
-        }
+          mysqli_close($con);
 
  ?>
 
@@ -90,6 +85,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
   <link rel="stylesheet" href="xcart.css">
   <link rel="stylesheet" href="buy.css">
   <link rel="stylesheet" href="sell.css">
@@ -115,8 +111,8 @@
           </a>
         </td>
         <td align="center" style="width:73%" >
-          <form class="searchbox_1" action="search.php" method="post">
-            <input type="search" class="search_1" placeholder="Search" />
+          <form class="searchbox_1" action="search.php" onsubmit="return sear()" method="post">
+            <input type="text" class="search_1" placeholder="Search" name='search'/>
             <button type="submit" class="submit_1" value="search">&nbsp;</button>
           </form>
         </td>
@@ -226,9 +222,9 @@
                                                       <?php echo $title; ?></h3>
 
                                   </td>
-                                    <td>
-                                      <h4 style="padding-left:180px; width:100%;font-size:12;" ><i class="fa fa-map-marker"></i> <?php echo $city.", ".$state; ?><h4>
-                                    </td>
+                                  <td>
+                                    <h4 style="padding-left:180px; width:100%;font-size:18;" ><i class="fa fa-map-marker"></i> <?php echo $city.", ".$state; ?><h4>
+                                  </td>
                                   </tr>
                                 <tr height="20%" >
                                   <td rowspan="2" class="xx" >
@@ -327,12 +323,12 @@
                                     <table width="100%">
                                       <tr>
                                       <td style="text-align:center; padding-top:0px; padding-left:20px; "  >
-                                        <a href="thanks.php" style="font-size:25px; font-family:Rockwell;"><button name="buy" type="button" style=" border-radius:30px; width:70%;height:45px; background-color:#ff1a1a; "> BUY NOW</button></a></td>
+                                        <button name="buy" type="button" onclick="alert('You need to login first!!')" style=" border-radius:30px; width:70%;height:45px; background-color:#ff1a1a; font-size:25px; font-family:Rockwell;"> BUY NOW</button></td>
 
                                       </tr>
                                       <tr>
                                         <td style="text-align:center; padding-left:20px;  padding-top:20px; padding-bottom:20px"  >
-                                    <a href="thanks.php"><button name="post" type="button" onclick="cart()" style="font-size:25px; font-family:Rockwell;border-radius:30px; width:70%; background-color:#009900;height:45px;">ADD TO CART</button></a>
+                                    <button onclick="alert('You need to login first!!')" name="post" type="button" onclick="cart()" style="font-size:25px; font-family:Rockwell;border-radius:30px; width:70%; background-color:#009900;height:45px;">ADD TO CART</button>
                                 </td>
                                 </tr>
 
@@ -532,6 +528,17 @@ function clickSignUp(){
   return false;
   }
   return true;
+}
+function sear()
+{
+   if(document.getElementsByName('search')[0].value==undefined || document.getElementsByName('search')[0].value==''){
+     alert('Search bar cannot be empty!!');
+    return false;
+    }
+    <?php
+      $_SESSION['prev']='buy.php';
+     ?>
+   return true;
 }
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {

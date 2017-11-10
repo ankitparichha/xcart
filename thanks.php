@@ -1,8 +1,8 @@
 <?php
         session_start();
-        if(empty($_SESSION['id'])){
-          $_SESSION['notloginbuy1']=1;
-          header("Location:buy.php");
+        if(!empty($_SESSION['fail-search'])){
+          echo "<script>alert('No related Product Found!!!');</script>";
+          unset($_SESSION['fail-search']);
         }
         $err="";
         $err1="";
@@ -69,8 +69,8 @@
           </a>
         </td>
         <td align="center" style="width:73%" >
-          <form class="searchbox_1" action="search.php" method="post">
-            <input type="search" class="search_1" placeholder="Search" />
+          <form class="searchbox_1" action="search.php" onsubmit="return sear()" method="post">
+            <input type="text" class="search_1" placeholder="Search" name='search'/>
             <button type="submit" class="submit_1" value="search">&nbsp;</button>
           </form>
         </td>
@@ -378,6 +378,17 @@ function clickSignUp(){
   return false;
   }
   return true;
+}
+function sear()
+{
+   if(document.getElementsByName('search')[0].value==undefined || document.getElementsByName('search')[0].value==''){
+     alert('Search bar cannot be empty!!');
+    return false;
+    }
+    <?php
+      $_SESSION['prev']='thanks.php';
+     ?>
+   return true;
 }
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {

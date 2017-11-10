@@ -1,5 +1,9 @@
 <?php
     session_start();
+    if(!empty($_SESSION['fail-search'])){
+      echo "<script>alert('No related Product Found!!!');</script>";
+      unset($_SESSION['fail-search']);
+    }
     if(empty($_SESSION['id'])){
       $_SESSION['notlogin']=1;
       header("Location:xcart.php");
@@ -40,8 +44,8 @@
           </a>
         </td>
         <td align="center" style="width:73%" >
-          <form class="searchbox_1" action="search.php" method="post">
-            <input type="search" class="search_1" placeholder="Search" />
+          <form class="searchbox_1" action="search.php" onsubmit="return sear()" method="post">
+            <input type="text" class="search_1" placeholder="Search" name='search' />
             <button type="submit" class="submit_1" value="search">&nbsp;</button>
           </form>
         </td>
@@ -191,7 +195,7 @@
                                     				<label>Photos for your Product :</label>
                                           </td>
                                           <td style="padding-left:30px;padding-top:15px">
-                                  							<button name="upload" type="submit" style=" border-radius:10px; width:50%; background-color:#802b00" name="image">Upload Files</button>
+                                  							<input name="upload" type="file" name="image">
                                           </td>
                                           </tr>
 
@@ -487,6 +491,17 @@ function clickSignUp(){
   return false;
   }
   return true;
+}
+function sear()
+{
+   if(document.getElementsByName('search')[0].value==undefined || document.getElementsByName('search')[0].value==''){
+     alert('Search bar cannot be empty!!');
+    return false;
+    }
+    <?php
+      $_SESSION['prev']='sell.php';
+     ?>
+   return true;
 }
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
